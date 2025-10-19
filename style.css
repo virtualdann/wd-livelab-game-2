@@ -1,0 +1,436 @@
+/* Charity: water Brand Colors
+
+Primary Colors:
+- Yellow:     #FFC907
+- Blue:       #2E9DF7
+
+Secondary Colors:
+- Light Blue: #8BD1CB
+- Green:      #4FCB53
+- Orange:     #FF902A
+- Red:        #F5402C
+- Dark Green: #159A48
+- Pink:       #F16061
+
+*/
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Avenir', sans-serif;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* Screen Layouts */
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    z-index: 100;
+}
+
+.logo {
+    max-width: 400px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.screen.hidden {
+    display: none;
+}
+
+.screen-content {
+    text-align: center;
+    padding: 20px;
+    max-width: 600px;
+}
+
+/* Typography */
+.game-title {
+    font-size: 64px;
+    color: #2E9DF7;
+    margin-bottom: 30px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+    font-size: 48px;
+    color: #2E9DF7;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+    font-size: 36px;
+    font-weight: bold;
+    color: #FFC907;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.logo-small {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FFC907;
+    margin: 20px 0;
+}
+
+/* Instructions */
+.instructions {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    margin: 30px 0;
+}
+
+.instructions p {
+    font-size: 24px;
+    color: #333;
+    margin: 10px 0;
+}
+
+/* Buttons */
+.cta-button {
+    background-color: #FFC907;
+    color: #333;
+    border: none;
+    padding: 15px 40px;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.cta-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.cta-button:active {
+    transform: scale(0.95);
+}
+
+.cta-button.secondary {
+    background-color: #2E9DF7;
+    color: white;
+}
+
+.link {
+    display: block;
+    margin-top: 20px;
+    color: white;
+    font-size: 18px;
+    text-decoration: underline;
+}
+
+.button-group {
+    margin: 20px 0;
+}
+
+/* Game Container */
+#gameContainer {
+    position: relative;
+}
+
+#gameContainer.hidden {
+    display: none;
+}
+
+canvas {
+    display: block;
+    background-color: #4FCB53;
+    border: 3px solid #159A48;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* HUD */
+#hud {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
+    pointer-events: none;
+}
+
+#scoreDisplay,
+#dropletsDisplay {
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+/* Game Over Card */
+.game-over-card {
+    max-width: 420px;
+    width: 90%;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    position: relative;
+}
+
+.card-image-container {
+    width: 100%;
+    height: 700px;
+    overflow: hidden;
+    position: relative;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-image-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.75) 40%, rgba(0, 0, 0, 0.95) 100%);
+    pointer-events: none;
+}
+
+.card-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 28px 28px;
+    color: white;
+    z-index: 10;
+}
+
+.impact-message {
+    font-size: 19px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 14px;
+    line-height: 1.4;
+}
+
+.charity-fact {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.6;
+    margin-bottom: 18px;
+}
+
+.high-score-badge {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #FFC907;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.reserve-button {
+    width: 100%;
+    padding: 15px;
+    margin: 6px 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    background-color: white;
+    color: #333;
+}
+
+.reserve-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+.reserve-button:active {
+    transform: translateY(0);
+}
+
+.reserve-button.secondary {
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    color: white;
+}
+
+.reserve-button.secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: white;
+}
+
+/* Legacy styles */
+.stat {
+    font-size: 32px;
+    color: black;
+    margin: 15px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.impact {
+    font-size: 28px;
+    color: #FFC907;
+    font-weight: bold;
+    margin: 25px 0;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.fact {
+    font-size: 18px;
+    color: white;
+    font-style: italic;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    line-height: 1.5;
+}
+
+.high-score {
+    font-size: 20px;
+    color: #FFC907;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 850px) {
+    canvas {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .game-title {
+        font-size: 48px;
+    }
+
+    h2 {
+        font-size: 36px;
+    }
+
+    .instructions p {
+        font-size: 20px;
+    }
+
+    .cta-button {
+        font-size: 20px;
+        padding: 12px 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .logo {
+        max-width: 200px;
+    }
+
+    /* Game Canvas - Full width and 80% height on mobile */
+    canvas {
+        width: 100vw !important;
+        height: 75vw !important; /* Maintain 4:3 aspect ratio (800:600) */
+        max-height: 80vh !important;
+        border: none;
+        border-radius: 0;
+    }
+
+    #gameContainer {
+        width: 100%;
+        height: auto;
+    }
+
+    #hud {
+        padding: 0 15px;
+    }
+
+    #scoreDisplay,
+    #dropletsDisplay {
+        font-size: 18px;
+        padding: 8px 15px;
+    }
+}
+
+@media (max-width: 500px) {
+    .game-title {
+        font-size: 36px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    .logo {
+        font-size: 28px;
+    }
+
+    .instructions p {
+        font-size: 18px;
+    }
+
+    .cta-button {
+        font-size: 18px;
+        padding: 10px 25px;
+    }
+
+    #scoreDisplay,
+    #dropletsDisplay {
+        font-size: 18px;
+        padding: 8px 15px;
+    }
+
+    .stat {
+        font-size: 24px;
+    }
+
+    .impact {
+        font-size: 22px;
+    }
+
+    /* Game Over Card - Further adjustments for small mobile */
+    .impact-message {
+        font-size: 16px;
+    }
+
+    .charity-fact {
+        font-size: 12px;
+    }
+
+    .reserve-button {
+        font-size: 15px;
+        padding: 12px;
+    }
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Joyride - charity: water</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="startScreen" class="screen">
+        <div class="screen-content">
+            <h1 class="game-title">Water Joyride</h1>
+            <img src="assets/charity_water_logo_white.jpg" alt="charity: water logo" class="logo">
+            <div class="instructions">
+                <p><strong>Tap to Jump</strong></p>
+                <p><strong>Hold to Hover</strong></p>
+            </div>
+            <button id="startButton" class="cta-button">Start Game</button>
+            <a href="https://www.charitywater.org" target="_blank" class="link">Learn More</a>
+        </div>
+    </div>
+
+    <div id="gameContainer" class="hidden">
+        <div id="hud">
+            <div id="scoreDisplay">Score: 0</div>
+            <div id="dropletsDisplay">💧 x 0</div>
+        </div>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+    </div>
+
+    <div id="gameOverScreen" class="screen hidden">
+        <div class="game-over-card">
+            <div class="card-image-container">
+                <img id="charityImage" src="" alt="charity: water project" class="card-image">
+            </div>
+            <div class="card-content">
+                <div id="impactMessage" class="impact-message">You helped provide water for 0 people!</div>
+                <div id="charityFact" class="charity-fact"></div>
+                <div id="highScoreDisplay" class="high-score-badge"></div>
+                <button id="playAgainButton" class="reserve-button">Try Again</button>
+                <a href="https://www.charitywater.org" target="_blank" class="reserve-button secondary">Learn More @ charity: water</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
