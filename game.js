@@ -2,6 +2,13 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+// Load Audio
+let isMute = false;
+const jumpSound = new Audio('assets/jump.mp3');
+jumpSound.volume = 0.3;
+const collectSound = new Audio('assets/collect.mp3');
+const gameOverSound = new Audio('assets/game-over.mp3');
+
 // Load Player Sprite
 const playerSprite = new Image();
 playerSprite.src = 'assets/player_sprite.png';
@@ -83,10 +90,15 @@ const startButton = document.getElementById('startButton');
 const playAgainButton = document.getElementById('playAgainButton');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const dropletsDisplay = document.getElementById('dropletsDisplay');
+const muteButton = document.getElementById('muteButton');
 
 // Event Listeners
 startButton.addEventListener('click', startGame);
 playAgainButton.addEventListener('click', restartGame);
+muteButton.addEventListener('click', () => {
+    isMute = !isMute;
+    muteButton.textContent = isMute ? '🔇' : '🔊';
+});
 
 // Input Event Listeners (Mouse and Touch)
 canvas.addEventListener('mousedown', handleInputStart);
@@ -119,6 +131,11 @@ function handleInputStart(e) {
     if (character.isOnGround) {
         character.velocityY = character.jumpForce;
         character.isOnGround = false;
+
+        if (!isMute) {
+            jumpSound.currentTime = 0;
+            jumpSound.play();
+        }
     }
     // Start hovering if in air
     character.isHovering = true;
@@ -283,6 +300,12 @@ function checkCollisions() {
             score += 10;
             dropletsCollected++;
             droplets.splice(i, 1);
+            
+            if (!isMute) {
+                collectSound.currentTime = 0;
+                collectSound.play()
+            }
+            
             updateHUD();
         }
     }
@@ -345,7 +368,7 @@ function updateHUD() {
 
 function drawBackground() {
     // Green background - charity: water Green
-    ctx.fillStyle = '#4FCB53';
+    ctx.fillStyle = '#FFC907';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Ground line - charity: water Dark Green
@@ -411,6 +434,13 @@ function render() {
 }
 
 function endGame() {
+    if (gameState === 'gameOver') return;
+
+    if (!isMute) {
+        gameOverSound.currentTime = 0;
+        gameOverSound.play();
+    }
+
     gameState = 'gameOver';
     gameContainer.classList.add('hidden');
     gameOverScreen.classList.remove('hidden');
