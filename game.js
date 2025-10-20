@@ -9,6 +9,31 @@ jumpSound.volume = 0.3;
 const collectSound = new Audio('assets/collect.mp3');
 const gameOverSound = new Audio('assets/game-over.mp3');
 
+// Load background mountains
+const bgMountain = new Image();
+bgMountain.src = 'assets/background/background.png';
+const fgMountain = new Image();
+fgMountain.src = 'assets/background/foreground.png';
+const cloud = new Image();
+cloud.src = 'assets/background/cloud.png';
+let cloudLoaded = false;
+
+cloud.onload = () => {
+    cloudLoaded = true;
+    drawBackground();
+    drawCharacter();
+};
+
+cloud.onerror = () => {
+    console.warn('Failed to load cloud image');
+    cloudLoaded = false;
+};
+
+let bgMountainX = 0;
+let fgMountainX = 0;
+let cloudX = 0;
+let clouds = [];
+
 // Load Player Sprite
 const playerSprite = new Image();
 playerSprite.src = 'assets/player_sprite.png';
@@ -57,8 +82,10 @@ let droplets = [];
 // Spawn Timers
 let obstacleSpawnTimer = 0;
 let dropletSpawnTimer = 0;
-let obstacleSpawnInterval = 180; // frames (3 seconds at 60fps)
-let dropletSpawnInterval = 90; // frames (1.5 seconds at 60fps)
+let cloudSpawnTimer = 0;
+let obstacleSpawnInterval = 180;
+let dropletSpawnInterval = 90;
+let cloudSpawnInterval = 600;
 
 // Input State
 let isInputActive = false;
@@ -182,12 +209,18 @@ function resetGame() {
     // Clear arrays
     obstacles = [];
     droplets = [];
+    clouds = [];
+
+    fgMountainX = 0;
+    bgMountainX = 0;
 
     // Reset timers
     obstacleSpawnTimer = 0;
     dropletSpawnTimer = 0;
+    cloudSpawnTimer = 0;
     obstacleSpawnInterval = 180;
     dropletSpawnInterval = 90;
+    cloudSpawnInterval = 600;
 
     // Reset input
     isInputActive = false;
@@ -255,12 +288,22 @@ function spawnDroplet() {
     droplets.push(droplet);
 }
 
+function spawnCloud() {
+    const cloud = {
+        x: 800,
+        y: Math.random() * 100 + 20,
+        width: 300,
+        height: 100
+    };
+
+    clouds.push(cloud);
+}
+
 function updateGameObjects() {
     // Update obstacles
     for (let i = obstacles.length - 1; i >= 0; i--) {
         obstacles[i].x -= gameSpeed;
 
-        // Remove if off screen
         if (obstacles[i].x + obstacles[i].width < 0) {
             obstacles.splice(i, 1);
         }
@@ -270,11 +313,25 @@ function updateGameObjects() {
     for (let i = droplets.length - 1; i >= 0; i--) {
         droplets[i].x -= gameSpeed;
 
-        // Remove if off screen
         if (droplets[i].x + droplets[i].width < 0) {
             droplets.splice(i, 1);
         }
     }
+
+    // Update background 
+    for (let i = clouds.length - 1; i >= 0; i--) {
+        clouds[i].x -= gameSpeed * 0.2;
+
+        if (clouds[i].x + clouds[i].width < 0) {
+            clouds.splice(i, 1);
+        }
+    }
+    fgMountainX -= gameSpeed * 0.7;
+    bgMountainX -= gameSpeed * 0.4;
+
+    if (cloudX <= -canvas.width) cloudX = 0;
+    if (fgMountainX <= -canvas.width) fgMountainX = 0;
+    if (bgMountainX <= -canvas.width) bgMountainX = 0;
 }
 
 function checkCollisions() {
@@ -359,6 +416,17 @@ function updateSpawning() {
         // Add randomness
         dropletSpawnInterval = Math.random() * 30 + 60;
     }
+
+    // Spawn clouds
+    cloudSpawnTimer++;
+    if (cloudSpawnTimer >= cloudSpawnInterval) {
+        spawnCloud();
+        cloudSpawnTimer = 0;
+        // Randomize next cloud spawn
+        cloudSpawnInterval = Math.random() * 400 + 200;
+    }
+
+
 }
 
 function updateHUD() {
@@ -371,6 +439,19 @@ function drawBackground() {
     ctx.fillStyle = '#FFC907';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    ctx.drawImage(bgMountain, bgMountainX, 0, canvas.width, canvas.height);
+    ctx.drawImage(bgMountain, bgMountainX + canvas.width, 0, canvas.width, canvas.height);
+    
+    
+    ctx.drawImage(fgMountain, fgMountainX, 0, canvas.width, canvas.height);
+    ctx.drawImage(fgMountain, fgMountainX + canvas.width, 0, canvas.width, canvas.height);
+    
+    if (cloudLoaded) {
+        for (let c of clouds) {
+            ctx.drawImage(cloud, c.x, c.y, 300, 100);
+        }
+    }
+    
     // Ground line - charity: water Dark Green
     ctx.fillStyle = '#159A48';
     ctx.fillRect(0, 560, canvas.width, 40);
